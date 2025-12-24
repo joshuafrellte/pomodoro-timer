@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+* {
+  transition: 0.15s ease;
+}
+
+body {
+  background-color: rgb(228, 228, 228);
+}

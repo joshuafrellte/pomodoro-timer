@@ -15,7 +15,7 @@ function App() {
   const [status, setStatus] = useState('welcome')
 
   const playIcon = !isRunning ? <FaPlay /> : <FaPause />
-  const iconColor = !isRunning ? 'bg-green' : 'bg-red'
+  const iconColor = !isRunning ? 'bg-green-700 active:bg-green-900' : 'bg-red-700 active:bg-red-900'
   
   
   useEffect(() => {
@@ -47,8 +47,6 @@ function App() {
     } else {
       if (isRunning) {
         document.body.className = mode === 'study' ? 'bg-green-200' : 'bg-orange-200'
-      } else {
-        // document.body.className = 'bg-red-200'
       }
     }
   }, [hasStarted, isRunning, mode])
@@ -80,7 +78,6 @@ function App() {
 
   function handleToggle() {
     setIsRunning(isRunning ? false : true)
-    console.log(isRunning)
     if (isRunning) handlePause()
     else handleStart()
   }
@@ -120,14 +117,14 @@ function App() {
         />
       </svg>
       <label className="text-3xl tracking-wide font-semibold">
-        {/* {mode.toUpperCase()} */} {status}
+        {status}
       </label>
       <div className="text-6xl font-semibold bg-white w-[224px] h-[224px] rounded-full flex justify-center items-center">
         <span>{formatTime()}</span>
       </div>
       <div className="flex gap-3 sm:gap-4">
           <button 
-            className={`${iconColor}-700 active:${iconColor}-900 text-white text-xl w-9 h-9 flex justify-center items-center rounded-sm cursor-pointer`}
+            className={`${iconColor} text-white text-xl w-9 h-9 flex justify-center items-center rounded-sm cursor-pointer`}
             onClick={() => handleToggle()}
           >
             {playIcon}

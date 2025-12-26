@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { FaPlay, FaPause } from 'react-icons/fa'
+import { RiResetLeftFill } from 'react-icons/ri';
 
 type Mode = 'study' | 'break'
 
@@ -11,6 +13,9 @@ function App() {
   const [isRunning, setIsRunning] = useState(false)
   const [hasStarted, setHasStarted] = useState(false)
   const [status, setStatus] = useState('welcome')
+
+  const playIcon = !isRunning ? <FaPlay /> : <FaPause />
+  const iconColor = !isRunning ? 'bg-green' : 'bg-red'
   
   
   useEffect(() => {
@@ -34,7 +39,7 @@ function App() {
       setStatus(nextMode)
       setTimeLeft(nextMode === 'study' ? STUDY_TIME : BREAK_TIME)
     }
-  }, [timeLeft, mode, status])
+  }, [timeLeft, mode])
 
   useEffect(() => {
     if (!hasStarted) {
@@ -73,6 +78,13 @@ function App() {
     }, 1000)
   }
 
+  function handleToggle() {
+    setIsRunning(isRunning ? false : true)
+    console.log(isRunning)
+    if (isRunning) handlePause()
+    else handleStart()
+  }
+
   function formatTime() {
     const formattedMinutes = String(Math.floor(timeLeft / 60)).padStart(2,'0')
     const formattedSeconds = String((timeLeft) % 60).padStart(2,'0')
@@ -87,7 +99,7 @@ function App() {
   const strokeOffset = (1 - progress) * circumference
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-1/2 text-center flex flex-col justify-center items-center">
+    <div className="absolute top-1/2 left-1/2 -translate-1/2 text-center flex flex-col justify-center items-center gap-4">
       <svg
         className="absolute"
         width="227"
@@ -101,41 +113,31 @@ function App() {
           r={radius}
           fill="none"
           stroke="black"
-          stroke-width="3"
-          stroke-linecap="round"
-          stroke-dasharray={circumference}
-          stroke-dashoffset={strokeOffset}
-        >
-
-        </circle>
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={strokeOffset}
+        />
       </svg>
       <label className="text-3xl tracking-wide font-semibold">
         {/* {mode.toUpperCase()} */} {status}
       </label>
-      <div className="text-6xl font-semibold bg-white w-[224px] h-[224px] rounded-full mt-3 mb-3 flex justify-center items-center">
+      <div className="text-6xl font-semibold bg-white w-[224px] h-[224px] rounded-full flex justify-center items-center">
         <span>{formatTime()}</span>
       </div>
       <div className="flex gap-3 sm:gap-4">
           <button 
-            className="bg-green-700 active:bg-green-900 text-white text-xl px-1 py-1 w-20 rounded-sm cursor-pointer"
-            disabled={isRunning}
-            onClick={() => handleStart()}
+            className={`${iconColor}-700 active:${iconColor}-900 text-white text-xl w-9 h-9 flex justify-center items-center rounded-sm cursor-pointer`}
+            onClick={() => handleToggle()}
           >
-            Start
+            {playIcon}
           </button>
           <button 
-            className="bg-red-700 active:bg-red-900 text-white text-xl px-2 py-1 w-20 rounded-sm cursor-pointer"
-            disabled={!isRunning}
-            onClick={() => handlePause()}
-          >
-            Pause
-          </button>
-          <button 
-            className="bg-blue-700 active:bg-blue-900 text-white text-xl px-2 py-1 w-20 rounded-sm cursor-pointer"
+            className="bg-blue-700 active:bg-blue-900 text-white text-xl w-9 h-9 flex justify-center items-center rounded-sm cursor-pointer"
             disabled={!hasStarted}
             onClick={() => handleReset()}
           >
-            Reset
+            <RiResetLeftFill strokeWidth={1}/>
           </button>
         </div>
     </div>
